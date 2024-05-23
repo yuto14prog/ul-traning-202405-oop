@@ -42,34 +42,18 @@ class Bookshelf
     public function findBookByTitle($title)
     {
         foreach ($this->books as $book) {
-            if ($book->getTitle() === $title) {
-                echo $title . "はあります" . "\n";
-                return $book;
-            }
+            if ($book->getTitle() === $title) return $book;
         }
-        echo $title . "はないです" . "\n";
         return null;
     }
 }
 
-class RejectedBocchanBookshelf extends Bookshelf
-{
-    public function canAddBook($book)
-    {
-        if ($book->getTitle() === '坊ちゃん') {
-            LimitedBookshelf::rejected();
-            return false;
-        }
-        return true;
-    }
-}
-
-class ThinBookshelf extends Bookshelf
+class ThinBookshelf extends LimitedBookshelf
 {
     public function canAddBook($book)
     {
         if ($book->getPageSize() >= 20) {
-            LimitedBookshelf::rejected();
+            $this->rejected();
             return false;
         }
         return true;
@@ -78,27 +62,58 @@ class ThinBookshelf extends Bookshelf
 
 class LimitedBookshelf extends Bookshelf
 {
-    private static $limitedTimes = 0;
-    public static function rejected()
+    private $limitedTimes;
+    public function __construct()
     {
-        self::$limitedTimes += 1;
+        $this->limitedTimes = 0;
     }
-    public static function getLimitedTimes()
+    public function rejected()
     {
-        echo "拒否回数は" . self::$limitedTimes . "回 \n";
+        $this->limitedTimes += 1;
+    }
+    public function getLimitedTimes()
+    {
+        return $this->limitedTimes;
     }
 }
 
+
+
+// 検証用関数
+function check($result, $bookshelf)
+{
+    if ($result) {
+        echo "保存されました" . "\n";
+    } else {
+        echo "保存が拒否されました" . "\n";
+    }
+    if ($bookshelf->findBookByTitle("坊ちゃん")) {
+        echo "'坊ちゃん'はあります" . "\n";
+    } else {
+        echo "'坊ちゃん'はないです" . "\n";
+    }
+}
+
+// 動作検証
 $bookshelf = new ThinBookshelf;
-$bookshelf->addBook(new Book("坊ちゃん", 20));
-$bookshelf->findBookByTitle("坊ちゃん"); // 拒否１回目
+// 拒否１回目
+$result = $bookshelf->addBook(new Book("坊ちゃん", 20));
+check($result, $bookshelf);
+// 拒否２回目
+$result = $bookshelf->addBook(new Book("坊ちゃん", 200));
+check($result, $bookshelf);
+// 成功
+$result = $bookshelf->addBook(new Book("坊ちゃん", 2));
+check($result, $bookshelf);
+// 拒否回数”２”
+echo "拒否回数は" . $bookshelf->getLimitedTimes() . "\n";
 
-$bookshelf = new RejectedBocchanBookshelf;
-$bookshelf->addBook(new Book("坊ちゃん", 520));
-$bookshelf->findBookByTitle("坊ちゃん"); // 拒否２回目
-
-$bookshelf = new RejectedBocchanBookshelf;
-$bookshelf->addBook(new Book("こころ", 520));
-$bookshelf->findBookByTitle("こころ"); // 通過
-
-LimitedBookshelf::getLimitedTimes(); // 拒否回数は2回
+$bookshelf2 = new ThinBookshelf;
+// 拒否１回目
+$result = $bookshelf2->addBook(new Book("坊ちゃん", 20));
+check($result, $bookshelf2);
+// 成功
+$result = $bookshelf2->addBook(new Book("坊ちゃん", 2));
+check($result, $bookshelf2);
+// 拒否回数”１”
+echo "拒否回数は" . $bookshelf2->getLimitedTimes() . "\n";

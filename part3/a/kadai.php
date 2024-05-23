@@ -43,12 +43,8 @@ class Bookshelf
     public function findBookByTitle($title)
     {
         foreach ($this->books as $book) {
-            if ($book->getTitle() === $title) {
-                echo $title . "はあります" . "\n";
-                return $book;
-            }
+            if ($book->getTitle() === $title) return $book;
         }
-        echo $title . "はないです" . "\n";
         return null;
     }
 }
@@ -61,10 +57,33 @@ class RejectedBocchanBookshelf extends Bookshelf
     }
 }
 
-$bookshelf = new RejectedBocchanBookshelf;
-$bookshelf->addBook(new Book("坊ちゃん", 520));
-$bookshelf->findBookByTitle("坊ちゃん"); // 坊ちゃんはないです
+
 
 $bookshelf = new RejectedBocchanBookshelf;
-$bookshelf->addBook(new Book("こころ", 520));
-$bookshelf->findBookByTitle("こころ"); // こころはあります
+$title = "坊ちゃん";
+$result = $bookshelf->addBook(new Book($title, 520));
+// "坊ちゃん"は保存されない
+if ($result) {
+    echo "保存されました" . "\n";
+} else {
+    echo "保存が拒否されました" . "\n";
+}
+if ($bookshelf->findBookByTitle($title)) {
+    echo $title . "はあります" . "\n";
+} else {
+    echo $title . "はないです" . "\n";
+}
+
+$title = "こころ";
+$result = $bookshelf->addBook(new Book($title, 520));
+// "こころ"は保存される
+if ($result) {
+    echo "保存されました" . "\n";
+} else {
+    echo "保存が拒否されました" . "\n";
+}
+if ($bookshelf->findBookByTitle($title)) {
+    echo $title . "はあります" . "\n";
+} else {
+    echo $title . "はないです" . "\n";
+}
