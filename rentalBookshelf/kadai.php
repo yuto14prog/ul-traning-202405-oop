@@ -80,11 +80,10 @@ class RentalBookshelf extends Bookshelf
     }
     public function returnBook($book)
     {
-        foreach ($this->rentedBooks as $index => $rentedBook) {
-            if ($rentedBook === $book) {
-                unset($this->rentedBooks[$index]);
-                return $book;
-            }
+        $index = array_search($book, $this->rentedBooks);
+        if ($index !== false) {
+            unset($this->rentedBooks[$index]);
+            return $book;
         }
         return false;
     }
