@@ -32,7 +32,7 @@ class PointCalculator
         return $max['name'];
     }
 
-    public function setData($data)
+    public function addData($data)
     {
         array_push($this->results, $data);
     }
@@ -49,7 +49,7 @@ echo "----最高得点の人の'name' \n";
 echo $pointCalculator->findMax() . "\n"; // 田中
 
 echo "----[ name => '阿部', point => 95 ]を追加 \n";
-$pointCalculator->setData(['name' => '阿部', 'point' => 95]);
+$pointCalculator->addData(['name' => '阿部', 'point' => 95]);
 echo "----全員のポイント合計 \n";
 echo $pointCalculator->sum() . "\n"; // 342
 
