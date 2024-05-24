@@ -22,3 +22,5 @@ https://www.isoroot.jp/blog/5260/
 - 基底クラスが持つメソッドを同じ名前で上書きできる
 - クラスに見合った動作をそれぞれ実現する
 - 一部のクラスだけ仕様が変わったとしても変更が容易
+
+https://webpia.jp/polymorphism/
