@@ -8,9 +8,9 @@ class Counter
         $this->value = 0;
     }
 
-    public function addValue($number)
+    public function addValue()
     {
-        if (gettype($number) == 'integer' || 'double') $this->value += $number;
+        $this->value++;
     }
 
     public function getValue()
@@ -20,7 +20,7 @@ class Counter
 }
 
 $counter = new Counter; // 数値をカウントアップするクラス
-$counter->addValue(1); //ここでcounterの値を一つ増やしたい
+$counter->addValue(); //ここでcounterの値を一つ増やしたい
 echo $counter->getValue() . "\n";
-$counter->addValue(1); //ここでcounterの値を一つ増やしたい
+$counter->addValue(); //ここでcounterの値を一つ増やしたい
 echo $counter->getValue() . "\n";
