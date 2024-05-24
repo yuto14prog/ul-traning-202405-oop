@@ -18,7 +18,9 @@ class PointCalculator
 
     public function average()
     {
-        return $this->sum() / count($this->results);
+        $count = count($this->results);
+        if ($count !== 0) return $this->sum() / $count;
+        return null;
     }
 
     public function findMax()
