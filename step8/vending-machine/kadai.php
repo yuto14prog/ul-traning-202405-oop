@@ -76,8 +76,7 @@ class VendingMachine
     {
         $index = $this->isExists($name);
 
-        if ($this->items[$index]['quantity'] === 0) return false;
-        return true;
+        return $this->items[$index]['quantity'] !== 0;
     }
 }
 
