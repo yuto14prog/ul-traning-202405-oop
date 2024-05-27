@@ -37,10 +37,10 @@ class VendingMachine
         var_dump($this->items);
     }
 
-    public function isExists(Item $item): null | int
+    public function isExists(string $name): null | int
     {
         foreach ($this->items as $index => $arrayItem) {
-            if ($item->getName() === $arrayItem['item']->getName()) return $index;
+            if ($name === $arrayItem['item']->getName()) return $index;
         }
         return null;
     }
@@ -49,11 +49,26 @@ class VendingMachine
     {
         if ($quantity < 0) throw new Exception('quantityは正の値にする必要があります');
 
-        $itemIndex = $this->isExists($item);
+        $itemIndex = $this->isExists($item->getName());
         if ($itemIndex === null) {
             array_push($this->items, ['item' => $item, 'quantity' => $quantity]);
         } else {
             $this->items[$itemIndex]['quantity'] += $quantity;
+        }
+    }
+
+    public function buy(string $name, int $cash)
+    {
+        $index = $this->isExists($name);
+        if ($index === null) throw new Exception($name . 'は存在しません');
+
+        if ($this->items[$index]['quantity'] === 0) {
+            throw new Exception($name . 'の在庫がありません');
+        } else if ($cash < $this->items[$index]['quantity']) {
+            throw new Exception('cashが足りません');
+        } else {
+            $this->items[$index]['quantity']--;
+            return $this->items[$index]['item'];
         }
     }
 }
@@ -67,4 +82,6 @@ $vendingMachine->addItem(new Item('b', 112), 1);
 $vendingMachine->addItem(new Item('c', 112), 1);
 $vendingMachine->addItem(new Item('c', 112), 100);
 
-$vendingMachine->getItems();
+// $vendingMachine->getItems();
+
+$vendingMachine->buy('b', 0);
