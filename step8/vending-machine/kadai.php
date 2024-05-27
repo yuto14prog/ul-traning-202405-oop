@@ -85,18 +85,34 @@ class VendingMachine
 
 
 // 動作チェック
+echo "-----初期値のセット \n";
 $vendingMachine = new VendingMachine;
 $vendingMachine->addItem(new Item('コーラ', 100), 0);
 $vendingMachine->addItem(new Item('オレンジ', 100), 1);
 $vendingMachine->addItem(new Item('ソーダ', 100), 1);
-
 var_dump($vendingMachine->getItems()); // 上３種類が出る
 
-// ↓↓例外処理が走る
+// (↓↓例外処理が走る)
 // $vendingMachine->addItem(new Item('', 100), 1); // nameが空です
 // $vendingMachine->addItem(new Item('エラー', 0), 1); // priceは正の値にする必要があります
 // $vendingMachine->addItem(new Item('エラー', 100), -1); // quantityは0以上の値にする必要があります
 
-$vendingMachine->addItem(new Item('コーラ', 100), 0);
-$vendingMachine->addItem(new Item('オレンジ', 100), 1);
-$vendingMachine->addItem(new Item('ソーダ', 100), 1);
+
+echo "-----補充 \n";
+$vendingMachine->addItem(new Item('ソーダ', 100), 100);
+var_dump($vendingMachine->getItems()); // ソーダが101に増える
+
+
+echo "-----購入 \n";
+var_dump($vendingMachine->buy('オレンジ', 200)); // オレンジが返ってくる
+
+
+echo "-----在庫確認 \n";
+var_dump($vendingMachine->canBuy('コーラ')); // false
+var_dump($vendingMachine->canBuy('オレンジ')); // false
+var_dump($vendingMachine->canBuy('ソーダ')); // true
+
+
+echo "-----異常系の確認 \n";
+// $vendingMachine->buy('ソーダ', 10); // cashが足りません
+// $vendingMachine->buy('コーラ', 200); // コーラの在庫がありません
