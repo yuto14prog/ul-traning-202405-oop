@@ -114,7 +114,6 @@ class DebugBookshelf extends Bookshelf
 
 
 
-putenv('DEBUG=true');
 if (getenv('DEBUG') == 'true') {
     $bookshelf = new DebugBookshelf;
 } else {
