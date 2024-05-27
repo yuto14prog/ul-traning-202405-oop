@@ -59,8 +59,6 @@ class VendingMachine
 
     public function buy(string $name, int $cash)
     {
-        $this->canBuy($name);
-
         $index = $this->isExists($name);
         if ($this->items[$index]['quantity'] === 0) {
             throw new Exception($name . 'の在庫がありません');
@@ -75,7 +73,6 @@ class VendingMachine
     public function canBuy(string $name): bool
     {
         $index = $this->isExists($name);
-        if ($index === null) throw new Exception($name . 'は存在しません');
 
         if ($this->items[$index]['quantity'] === 0) return false;
         return true;
