@@ -34,7 +34,7 @@ class VendingMachine
 
     public function getItems()
     {
-        var_dump($this->items);
+        return $this->items;
     }
 
     public function isExists(string $name): null | int
@@ -47,7 +47,7 @@ class VendingMachine
 
     public function addItem(Item $item, int $quantity)
     {
-        if ($quantity < 0) throw new Exception('quantityは正の値にする必要があります');
+        if ($quantity < 0) throw new Exception('quantityは0以上の値にする必要があります');
 
         $itemIndex = $this->isExists($item->getName());
         if ($itemIndex === null) {
@@ -59,9 +59,9 @@ class VendingMachine
 
     public function buy(string $name, int $cash)
     {
-        $index = $this->isExists($name);
-        if ($index === null) throw new Exception($name . 'は存在しません');
+        $this->canBuy($name);
 
+        $index = $this->isExists($name);
         if ($this->items[$index]['quantity'] === 0) {
             throw new Exception($name . 'の在庫がありません');
         } else if ($cash < $this->items[$index]['quantity']) {
@@ -71,17 +71,32 @@ class VendingMachine
             return $this->items[$index]['item'];
         }
     }
+
+    public function canBuy(string $name): bool
+    {
+        $index = $this->isExists($name);
+        if ($index === null) throw new Exception($name . 'は存在しません');
+
+        if ($this->items[$index]['quantity'] === 0) return false;
+        return true;
+    }
 }
 
 
 
-
+// 動作チェック
 $vendingMachine = new VendingMachine;
-$vendingMachine->addItem(new Item('a', 112), 0);
-$vendingMachine->addItem(new Item('b', 112), 1);
-$vendingMachine->addItem(new Item('c', 112), 1);
-$vendingMachine->addItem(new Item('c', 112), 100);
+$vendingMachine->addItem(new Item('コーラ', 100), 0);
+$vendingMachine->addItem(new Item('オレンジ', 100), 1);
+$vendingMachine->addItem(new Item('ソーダ', 100), 1);
 
-// $vendingMachine->getItems();
+var_dump($vendingMachine->getItems()); // 上３種類が出る
 
-$vendingMachine->buy('b', 0);
+// ↓↓例外処理が走る
+// $vendingMachine->addItem(new Item('', 100), 1); // nameが空です
+// $vendingMachine->addItem(new Item('エラー', 0), 1); // priceは正の値にする必要があります
+// $vendingMachine->addItem(new Item('エラー', 100), -1); // quantityは0以上の値にする必要があります
+
+$vendingMachine->addItem(new Item('コーラ', 100), 0);
+$vendingMachine->addItem(new Item('オレンジ', 100), 1);
+$vendingMachine->addItem(new Item('ソーダ', 100), 1);
