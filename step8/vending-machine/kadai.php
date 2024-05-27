@@ -32,6 +32,19 @@ class VendingMachine
         $this->items = [];
     }
 
+    public function getItems()
+    {
+        var_dump($this->items);
+    }
+
+    public function isExists(Item $item): null | int
+    {
+        foreach ($this->items as $index => $arrayItem) {
+            if ($item->getName() === $arrayItem['item']->getName()) return $index;
+        }
+        return null;
+    }
+
     public function addItem(Item $item, int $quantity)
     {
         if ($quantity < 0) throw new Exception('quantityは正の値にする必要があります');
@@ -43,20 +56,8 @@ class VendingMachine
             $this->items[$itemIndex]['quantity'] += $quantity;
         }
     }
-
-    public function isExists(Item $item): null | int
-    {
-        foreach ($this->items as $index => $arrayItem) {
-            if ($item->getName() === $arrayItem['item']->getName()) return $index;
-        }
-        return null;
-    }
-
-    public function getItems()
-    {
-        var_dump($this->items);
-    }
 }
+
 
 
 
