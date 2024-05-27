@@ -60,6 +60,8 @@ class VendingMachine
     public function buy(string $name, int $cash)
     {
         $index = $this->isExists($name);
+        if ($index === null) throw new Exception($name . 'は存在しません');
+
         if ($this->items[$index]['quantity'] === 0) {
             throw new Exception($name . 'の在庫がありません');
         } else if ($cash < $this->items[$index]['quantity']) {
@@ -102,6 +104,9 @@ var_dump($vendingMachine->getItems()); // ソーダが101に増える
 
 echo "-----購入 \n";
 var_dump($vendingMachine->buy('オレンジ', 200)); // オレンジが返ってくる
+
+// (↓↓例外処理が走る)
+var_dump($vendingMachine->buy('ファンタ', 200)); // ファンタは存在しません
 
 
 echo "-----在庫確認 \n";
