@@ -99,6 +99,17 @@ class DebugBookshelf extends LimitedBookshelf
         echo "-------- \n";
         return $returnValue;
     }
+    public function findBookByTitle($title)
+    {
+        $returnValue = parent::findBookByTitle($title);
+        echo "↓↓findBookByTitle()↓↓ \n";
+        echo "引数：";
+        var_dump($title);
+        echo "戻り値：";
+        var_dump($returnValue);
+        echo "-------- \n";
+        return $returnValue;
+    }
 }
 
 
