@@ -105,7 +105,7 @@ echo "-----購入 \n";
 var_dump($vendingMachine->buy('オレンジ', 200)); // オレンジが返ってくる
 
 // (↓↓例外処理が走る)
-var_dump($vendingMachine->buy('ファンタ', 200)); // ファンタは存在しません
+// var_dump($vendingMachine->buy('ファンタ', 200)); // ファンタは存在しません
 
 
 echo "-----在庫確認 \n";
