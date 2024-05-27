@@ -75,7 +75,7 @@ class LimitedBookshelf extends Bookshelf
     }
 }
 
-class DebugBookshelf extends LimitedBookshelf
+class DebugBookshelf extends Bookshelf
 {
     public function addBook($book)
     {
